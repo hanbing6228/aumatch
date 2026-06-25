@@ -1,0 +1,187 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background: #f7ecda;
+  color: #36291a;
+  font-family: var(--font-sans), "Noto Sans SC", system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+::selection {
+  background: #b1812f;
+  color: #fff8ec;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: #b7a886;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  outline: none;
+  border-color: #b1812f !important;
+  box-shadow: 0 0 0 3px rgba(177, 129, 47, 0.15);
+}
+
+/* ── Design system animations (ported from the AuMatch concept) ── */
+@keyframes auFloat {
+  0%, 100% { transform: translateX(-50%) translateY(0); }
+  50% { transform: translateX(-50%) translateY(-20px); }
+}
+@keyframes auShimmer {
+  0% { background-position: 0% 50%; }
+  100% { background-position: -200% 50%; }
+}
+@keyframes auFadeUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes auDrift {
+  0%, 100% { background-position: 0% 0%; }
+  50% { background-position: 100% 100%; }
+}
+@keyframes auSway {
+  0%, 100% { transform: rotate(-4deg); }
+  50% { transform: rotate(4deg); }
+}
+@keyframes auGlow {
+  0%, 100% { box-shadow: 0 8px 22px rgba(177, 129, 47, 0.28); }
+  50% { box-shadow: 0 8px 30px rgba(177, 129, 47, 0.55); }
+}
+
+.au-cta-glow { animation: auGlow 2.8s ease-in-out infinite; }
+.au-sway { transform-origin: 50% 100%; animation: auSway 4.5s ease-in-out infinite; }
+.au-enter { opacity: 0; animation: auFadeUp 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) forwards; }
+
+@media (prefers-reduced-motion: reduce) {
+  .au-enter { opacity: 1 !important; animation: none !important; }
+  .au-cta-glow, .au-sway { animation: none !important; }
+  * { animation-duration: 0.001s !important; }
+}
+
+/* ── Reusable primitives ── */
+@layer components {
+  .au-shell {
+    font-family: var(--font-sans), "Noto Sans SC", sans-serif;
+    background: #f7ecda;
+    color: #36291a;
+    min-height: 100vh;
+  }
+  .au-serif {
+    font-family: var(--font-serif), "Noto Serif SC", serif;
+  }
+  .au-kicker {
+    font-size: 11.5px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: #b1812f;
+  }
+  .au-btn-gold {
+    background: #b1812f;
+    color: #fff8ec;
+    border: none;
+    padding: 16px 32px;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    cursor: pointer;
+    border-radius: 2px;
+    transition: all 0.22s;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+  .au-btn-gold:hover {
+    background: #c79a45;
+    transform: translateY(-2px);
+    box-shadow: 0 12px 28px rgba(177, 129, 47, 0.3);
+  }
+  .au-btn-gold:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+  }
+  .au-btn-navy {
+    background: #14283f;
+    color: #ecdcc0;
+    border: none;
+    padding: 16px 32px;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    cursor: pointer;
+    border-radius: 2px;
+    transition: all 0.22s;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+  .au-btn-navy:hover {
+    background: #1c3a5e;
+    transform: translateY(-2px);
+    box-shadow: 0 12px 28px rgba(20, 40, 63, 0.3);
+  }
+  .au-btn-outline {
+    background: transparent;
+    color: #1c3a5e;
+    border: 1px solid rgba(28, 58, 94, 0.4);
+    padding: 16px 32px;
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    cursor: pointer;
+    border-radius: 2px;
+    transition: all 0.22s;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+  .au-btn-outline:hover {
+    border-color: #1c3a5e;
+    background: rgba(28, 58, 94, 0.06);
+    transform: translateY(-2px);
+  }
+  .au-input {
+    width: 100%;
+    background: #fdf7ec;
+    border: 1px solid rgba(54, 41, 26, 0.16);
+    border-radius: 2px;
+    padding: 14px 16px;
+    font-size: 15px;
+    color: #36291a;
+  }
+  .au-label {
+    display: block;
+    font-size: 11.5px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #897c64;
+    margin-bottom: 9px;
+  }
+  .au-err {
+    font-size: 13px;
+    color: #a23b2d;
+    margin-top: 8px;
+  }
+}
