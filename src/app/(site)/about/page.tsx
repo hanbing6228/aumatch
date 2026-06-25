@@ -103,6 +103,28 @@ export default function AboutPage() {
           </div>
         </div>
       </section>
+
+      {/* Gallery */}
+      <section style={{ padding: "0 28px clamp(72px,9vw,116px)" }}>
+        <div className="mx-auto max-w-[1140px]">
+          <div className="mb-9 max-w-[560px]">
+            <div className="au-kicker mb-4">{t.gallery.kicker}</div>
+            <h2 className="au-serif" style={{ fontWeight: 500, fontSize: "clamp(28px,4vw,42px)", lineHeight: 1.1, color: "#36291a", margin: 0 }}>{t.gallery.title}</h2>
+          </div>
+          <div className="grid grid-cols-1 gap-[18px] sm:grid-cols-3">
+            {t.gallery.items.map((g) => (
+              <figure key={g.label} style={{ margin: 0 }}>
+                <div style={{ width: "100%", aspectRatio: "4/3", border: "1px solid rgba(54,41,26,.12)", background: "repeating-linear-gradient(135deg,#efe2c8 0 13px,#e8d6b2 13px 26px)" }} />
+                <figcaption className="flex items-center gap-[9px]" style={{ marginTop: 14, fontSize: 13.5, color: "#6f6450" }}>
+                  <span style={{ color: "#b1812f", fontSize: 8 }}>◆</span>
+                  <span style={{ fontSize: 10, letterSpacing: ".18em", color: "#9a7b3e", textTransform: "uppercase" }}>{g.label}</span>
+                  {g.caption}
+                </figcaption>
+              </figure>
+            ))}
+          </div>
+        </div>
+      </section>
     </>
   );
 }

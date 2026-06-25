@@ -81,17 +81,29 @@ export function SiteHeader() {
           </Link>
         </div>
 
-        {/* Mobile toggle */}
-        <button
-          className="flex flex-col items-center justify-center gap-1 md:hidden"
-          style={{ width: 42, height: 38, border: "1px solid rgba(177,129,47,.4)", borderRadius: 2, background: "none" }}
-          aria-label="Toggle menu"
-          onClick={() => setOpen((v) => !v)}
-        >
-          <span style={{ width: 18, height: 1.5, background: "#1c3a5e" }} />
-          <span style={{ width: 18, height: 1.5, background: "#1c3a5e" }} />
-          <span style={{ width: 18, height: 1.5, background: "#1c3a5e" }} />
-        </button>
+        {/* Mobile cluster: language toggle + Book CTA + menu, all visible */}
+        <div className="flex items-center gap-2.5 md:hidden">
+          <LangToggle lang={lang} setLang={setLang} />
+          <Link
+            href="/book"
+            aria-label={t.nav.cta}
+            className="au-btn-gold"
+            style={{ padding: "9px 12px", fontSize: 12, gap: 6 }}
+          >
+            <CalendarIcon />
+            <span>{lang === "zh" ? "预约" : "Book"}</span>
+          </Link>
+          <button
+            className="flex flex-col items-center justify-center gap-1"
+            style={{ width: 40, height: 38, border: "1px solid rgba(177,129,47,.4)", borderRadius: 2, background: "none", flexShrink: 0 }}
+            aria-label="Toggle menu"
+            onClick={() => setOpen((v) => !v)}
+          >
+            <span style={{ width: 18, height: 1.5, background: "#1c3a5e" }} />
+            <span style={{ width: 18, height: 1.5, background: "#1c3a5e" }} />
+            <span style={{ width: 18, height: 1.5, background: "#1c3a5e" }} />
+          </button>
+        </div>
       </div>
 
       {open && (
@@ -107,15 +119,9 @@ export function SiteHeader() {
               {item.label}
             </Link>
           ))}
-          <Link href="/portal" onClick={() => setOpen(false)} className="block" style={{ borderBottom: "1px solid rgba(54,41,26,.08)", fontSize: 16, padding: "15px 0", color: "#36291a" }}>
+          <Link href="/portal" onClick={() => setOpen(false)} className="block" style={{ fontSize: 16, padding: "15px 0", color: "#36291a" }}>
             {t.nav.signin}
           </Link>
-          <div className="mt-[18px] flex items-center gap-[14px]">
-            <Link href="/book" onClick={() => setOpen(false)} className="au-btn-gold flex-1" style={{ padding: "13px 18px" }}>
-              {t.nav.cta}
-            </Link>
-            <LangToggle lang={lang} setLang={setLang} />
-          </div>
         </div>
       )}
     </header>
@@ -139,5 +145,14 @@ function LangToggle({
         中文
       </button>
     </div>
+  );
+}
+
+function CalendarIcon() {
+  return (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
+      <rect x="3" y="4" width="18" height="18" rx="2" />
+      <path d="M3 10h18M8 2v4M16 2v4" />
+    </svg>
   );
 }

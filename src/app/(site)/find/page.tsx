@@ -166,6 +166,49 @@ export default function FindPage() {
           <Link href="/book" className="au-btn-gold">{t.find.matchCta} →</Link>
         </div>
       </section>
+
+      {/* Our bench — meet a few professionals */}
+      <section style={{ padding: "0 28px clamp(72px,9vw,116px)" }}>
+        <div className="mx-auto max-w-[1140px]">
+          <div className="mb-[46px] text-center">
+            <div className="au-kicker mb-4">{t.bench.kicker}</div>
+            <h2 className="au-serif" style={{ fontWeight: 500, fontSize: "clamp(30px,4.4vw,46px)", lineHeight: 1.1, color: "#36291a", margin: "0 0 16px" }}>{t.bench.title}</h2>
+            <p style={{ maxWidth: 560, margin: "0 auto", fontSize: 15, lineHeight: 1.65, color: "#6f6450" }}>{t.bench.sub}</p>
+          </div>
+          <div className="grid grid-cols-1 gap-[18px] sm:grid-cols-2 lg:grid-cols-4">
+            {t.bench.items.map((c) => (
+              <div key={c.initials} className="flex flex-col overflow-hidden" style={{ background: "#fffaf2", border: "1px solid rgba(54,41,26,.09)" }}>
+                <div style={{ position: "relative" }}>
+                  <div style={{ height: 198, background: "linear-gradient(150deg,#21405f,#14283f)" }} />
+                  <div className="au-serif" style={{ position: "absolute", left: 16, bottom: -21, width: 46, height: 46, borderRadius: "50%", border: "2px solid #fffaf2", background: "linear-gradient(135deg,#d8b878,#b1812f)", color: "#fff8ec", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 15, fontWeight: 600, boxShadow: "0 4px 10px rgba(20,40,63,.25)" }}>{c.initials}</div>
+                </div>
+                <div className="flex flex-1 flex-col" style={{ padding: "30px 22px 24px" }}>
+                  <div className="flex items-start justify-between gap-[10px]">
+                    <div style={{ minWidth: 0 }}>
+                      <div className="au-serif" style={{ fontWeight: 600, fontSize: 19, color: "#1c3a5e", lineHeight: 1.1 }}>{c.name}</div>
+                      <div style={{ fontSize: 11.5, color: "#8a8275", marginTop: 3 }}>{c.role}</div>
+                    </div>
+                    <div className="flex items-center gap-[3px]" style={{ fontSize: 13, color: "#b1812f", whiteSpace: "nowrap" }}><span style={{ fontSize: 11 }}>★</span>{c.rating}</div>
+                  </div>
+                  <div className="flex gap-[7px]" style={{ fontSize: 11, color: "#6f6450", margin: "13px 0" }}>
+                    <span style={{ background: "#f1e7d4", padding: "4px 10px", borderRadius: 999 }}>{c.location}</span>
+                    <span style={{ background: "#f1e7d4", padding: "4px 10px", borderRadius: 999 }}>{c.exp}</span>
+                  </div>
+                  <p style={{ fontSize: 12.5, lineHeight: 1.6, color: "#6f6450", margin: "0 0 15px" }}>{c.bio}</p>
+                  <div className="flex flex-wrap gap-[6px]" style={{ marginBottom: 18 }}>
+                    {c.tags.map((tg) => (
+                      <span key={tg} style={{ fontSize: 10.5, color: "#36291a", background: "#f7ecda", border: "1px solid rgba(54,41,26,.08)", padding: "4px 9px", borderRadius: 999 }}>{tg}</span>
+                    ))}
+                  </div>
+                  <div className="mt-auto flex items-center gap-[7px]" style={{ paddingTop: 14, borderTop: "1px solid rgba(54,41,26,.08)", fontSize: 11, letterSpacing: ".04em", color: "#1c3a5e" }}>
+                    <span style={{ color: "#1c8a5b", fontSize: 13 }}>✓</span>{t.bench.verified}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
     </>
   );
 }
