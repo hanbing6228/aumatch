@@ -7,6 +7,7 @@ import {
 } from "next/font/google";
 import "./globals.css";
 import { Providers } from "@/components/providers";
+import { Analytics } from "@/components/analytics";
 
 const serif = Cormorant_Garamond({
   subsets: ["latin"],
@@ -79,6 +80,7 @@ export default function RootLayout({
       className={`${serif.variable} ${sans.variable} ${serifSC.variable} ${sansSC.variable}`}
     >
       <body>
+        <Analytics />
         <Providers>{children}</Providers>
       </body>
     </html>

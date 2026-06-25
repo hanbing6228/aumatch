@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 import { employerLeadSchema } from "@/lib/validation";
 import { notifyTeam } from "@/lib/notify";
+import { verifyRecaptcha } from "@/lib/recaptcha";
 
 // P0 conversion endpoint: employer (family) intake from "Find a Caregiver".
 export async function POST(req: Request) {
@@ -10,6 +11,11 @@ export async function POST(req: Request) {
     body = await req.json();
   } catch {
     return NextResponse.json({ error: "Invalid JSON" }, { status: 400 });
+  }
+
+  const token = (body as { recaptchaToken?: string })?.recaptchaToken;
+  if (!(await verifyRecaptcha(token, "employer_lead"))) {
+    return NextResponse.json({ error: "Failed bot check" }, { status: 400 });
   }
 
   const parsed = employerLeadSchema.safeParse(body);

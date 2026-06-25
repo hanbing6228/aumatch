@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 import { providerApplicationSchema } from "@/lib/validation";
 import { notifyTeam } from "@/lib/notify";
+import { verifyRecaptcha } from "@/lib/recaptcha";
 
 // P0 conversion endpoint: care professional application from "Join as Provider".
 // The resume/certificate file is uploaded separately to blob storage; the
@@ -12,6 +13,11 @@ export async function POST(req: Request) {
     body = await req.json();
   } catch {
     return NextResponse.json({ error: "Invalid JSON" }, { status: 400 });
+  }
+
+  const token = (body as { recaptchaToken?: string })?.recaptchaToken;
+  if (!(await verifyRecaptcha(token, "provider_application"))) {
+    return NextResponse.json({ error: "Failed bot check" }, { status: 400 });
   }
 
   const parsed = providerApplicationSchema.safeParse(body);

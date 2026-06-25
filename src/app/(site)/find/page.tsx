@@ -4,11 +4,14 @@ import Link from "next/link";
 import { useState } from "react";
 import { useI18n } from "@/lib/i18n";
 import { formatUSPhone, isValidEmail, isValidUSPhone } from "@/lib/format";
+import { useRecaptcha } from "@/hooks/use-recaptcha";
+import { Conversions } from "@/lib/analytics";
 
 type Errors = Partial<Record<string, string>>;
 
 export default function FindPage() {
   const { t, lang } = useI18n();
+  const recaptcha = useRecaptcha();
   const [form, setForm] = useState({
     fullName: "", phone: "", email: "", location: "", services: [] as string[],
     frequency: "", budget: "", startDate: "", notes: "",
@@ -42,16 +45,18 @@ export default function FindPage() {
     if (!validate()) return;
     setSubmitting(true);
     try {
+      const recaptchaToken = await recaptcha("employer_lead");
       const res = await fetch("/api/leads/employer", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...form, locale: lang }),
+        body: JSON.stringify({ ...form, locale: lang, recaptchaToken }),
       });
       if (!res.ok) {
         const data = await res.json().catch(() => ({}));
         setErrors(data.issues ? flatten(data.issues) : { _form: t.err.generic });
         return;
       }
+      Conversions.employerLead();
       setDone(true);
       window.scrollTo({ top: 0, behavior: "smooth" });
     } catch {

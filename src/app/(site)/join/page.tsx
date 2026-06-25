@@ -4,16 +4,20 @@ import Link from "next/link";
 import { useState } from "react";
 import { useI18n } from "@/lib/i18n";
 import { formatUSPhone, isValidEmail, isValidUSPhone } from "@/lib/format";
+import { useRecaptcha } from "@/hooks/use-recaptcha";
+import { Conversions } from "@/lib/analytics";
 
 type Errors = Partial<Record<string, string>>;
 const MAX_FILE = 5 * 1024 * 1024; // 5 MB
 
 export default function JoinPage() {
   const { t, lang } = useI18n();
+  const recaptcha = useRecaptcha();
   const [form, setForm] = useState({
     fullName: "", phone: "", email: "", city: "", availability: "",
     expectedRate: "", consentBgCheck: false,
   });
+  const [file, setFile] = useState<File | null>(null);
   const [fileName, setFileName] = useState("");
   const [errors, setErrors] = useState<Errors>({});
   const [submitting, setSubmitting] = useState(false);
@@ -26,9 +30,11 @@ export default function JoinPage() {
     if (f.size > MAX_FILE) {
       setErrors((er) => ({ ...er, file: t.err.fileSize }));
       setFileName("");
+      setFile(null);
       return;
     }
     setErrors((er) => ({ ...er, file: undefined }));
+    setFile(f);
     setFileName(f.name);
   };
 
@@ -47,16 +53,32 @@ export default function JoinPage() {
     if (!validate()) return;
     setSubmitting(true);
     try {
+      // Best-effort upload to Vercel Blob; falls back to name-only if the blob
+      // store isn't configured (503) or the upload fails.
+      let documentUrl = "";
+      if (file) {
+        try {
+          const fd = new FormData();
+          fd.append("file", file);
+          const up = await fetch("/api/upload", { method: "POST", body: fd });
+          if (up.ok) documentUrl = (await up.json()).url ?? "";
+        } catch {
+          /* keep documentUrl empty */
+        }
+      }
+
+      const recaptchaToken = await recaptcha("provider_application");
       const res = await fetch("/api/leads/provider", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...form, documentName: fileName, locale: lang }),
+        body: JSON.stringify({ ...form, documentName: fileName, documentUrl, locale: lang, recaptchaToken }),
       });
       if (!res.ok) {
         const data = await res.json().catch(() => ({}));
         setErrors({ _form: t.err.generic, ...(data.issues ? {} : {}) });
         return;
       }
+      Conversions.providerApplication();
       setDone(true);
       window.scrollTo({ top: 0, behavior: "smooth" });
     } catch {

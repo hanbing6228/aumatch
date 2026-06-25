@@ -6,6 +6,7 @@ import { useState } from "react";
 import { useI18n } from "@/lib/i18n";
 import { isValidEmail } from "@/lib/format";
 import { CalendlyEmbed } from "@/components/calendly-embed";
+import { Conversions } from "@/lib/analytics";
 
 const CALENDLY_URL = process.env.NEXT_PUBLIC_CALENDLY_URL;
 
@@ -31,6 +32,7 @@ export default function BookPage() {
         body: JSON.stringify({ ...form, locale: lang }),
       });
       if (!res.ok) { setErrors({ _form: t.err.generic }); return; }
+      Conversions.booking();
       setDone(true);
       window.scrollTo({ top: 0, behavior: "smooth" });
     } catch {
